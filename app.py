@@ -1,7 +1,6 @@
 import streamlit as st
 import random
 import json
-from dotenv import load_dotenv
 import os
 import anthropic
 
