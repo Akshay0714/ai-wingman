@@ -22,6 +22,72 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+Certainly, I can help you add authentication to your Streamlit app and store the username and password in the secrets file, similar to how you've done with the API key. Here's how you can modify your code to include authentication:
+
+First, add the username and password to your secrets.toml file:
+
+tomlCopy[anthropic]
+api_key = "your_api_key_here"
+
+[auth]
+username = "your_username"
+password = "your_password"
+
+Now, let's modify your code to include authentication. We'll add a login page and use Streamlit's built-in authentication mechanism:
+
+pythonCopyimport streamlit as st
+import random
+import json
+import os
+import anthropic
+import hmac
+
+# Set page config
+st.set_page_config(page_title="Will You Go Out With Me?", page_icon="❤️", layout="centered")
+
+# Custom CSS for background and styling
+st.markdown("""
+<style>
+    body {
+        background-image: url('https://example.com/your-background-image.jpg');
+        background-size: cover;
+    }
+    .stButton>button {
+        color: #ffffff;
+        background-color: #ff69b4;
+        border-radius: 20px;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+def check_password():
+    """Returns `True` if the user had the correct password."""
+
+    def password_entered():
+        """Checks whether a password entered by the user is correct."""
+        if hmac.compare_digest(st.session_state["password"], st.secrets["auth"]["password"]):
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]  # Don't store the password.
+        else:
+            st.session_state["password_correct"] = False
+
+    if "password_correct" not in st.session_state:
+        # First run, show input for password.
+        st.text_input(
+            "Password", type="password", on_change=password_entered, key="password"
+        )
+        return False
+    elif not st.session_state["password_correct"]:
+        # Password incorrect, show input + error.
+        st.text_input(
+            "Password", type="password", on_change=password_entered, key="password"
+        )
+        st.error("😕 Password incorrect")
+        return False
+    else:
+        # Password correct.
+        return True
+
 def main_page():
     st.title("Hey there, Beautiful! 😍")
     st.write("I've got a burning question that's been on my mind...")
@@ -57,6 +123,7 @@ if 'answer' not in st.session_state:
 def switch_page(page):
     st.session_state.page = page
     st.experimental_rerun()# Chat page
+
 
 def invoke_model(messages):
     # Set the model ID, e.g., Claude 3 Haiku.
@@ -176,6 +243,24 @@ def chat_page():
 # Function to switch pages
 def switch_page(page):
     st.session_state.page = page
+
+# Main app logic
+if 'page' not in st.session_state:
+    st.session_state.page = 'login'
+
+if st.session_state.page == 'login':
+    st.title("Login")
+    username = st.text_input("Username")
+    if username == st.secrets["auth"]["username"]:
+        if check_password():
+            st.session_state.page = 'main'
+            st.experimental_rerun()
+    else:
+        st.error("Incorrect username")
+elif st.session_state.page == 'main':
+    main_page()
+elif st.session_state.page == 'chat':
+    chat_page()
 
 # Main app logic
 if 'page' not in st.session_state:
