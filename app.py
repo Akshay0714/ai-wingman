@@ -1,6 +1,5 @@
 import streamlit as st
 import random
-import toml
 import json
 from dotenv import load_dotenv
 import os
@@ -91,38 +90,22 @@ def invoke_model(messages):
 
         Remember to be engaging and encourage questions. Your goal is to paint a vivid picture of Akshay that leaves his potential date intrigued and wanting to know more!
         Keep you response crisp and short. It should not be more than 3-4 sentences. Keep it light and fun!"""
-    
-    # Format the request payload using the model's native structure.
-    anthropic.Anthropic().messages.create(
-    model=model_id,
-    max_tokens=512,
-    messages=messages,
-    system=system_prompt,
-)
-    native_request = {
-        "anthropic_version": "bedrock-2023-05-31",
-        "max_tokens": 512,
-        "temperature": 0.5,
-        "system": system_prompt,
-        "messages": messages,
-    }
-
-    # Convert the native request to JSON.
-    request = json.dumps(native_request)
-
+        
     try:
         # Invoke the model with the request.
-        response = client.invoke_model(modelId=model_id, body=request)
+        message = client.messages.create(
+            model=model_id,
+            max_tokens=512,
+            messages=messages,
+            system=system_prompt,
+        )
 
     except Exception as e:
         print(f"ERROR: Can't invoke '{model_id}'. Reason: {e}")
         return "I'm sorry, I encountered an error. Please try again."
 
-    # Decode the response body.
-    model_response = json.loads(response["body"].read())
-
     # Extract and return the response text.
-    return model_response["content"][0]["text"]
+    return message.content
 
 def chat_page():
     st.title("Get to Know Your Awesome Date!")
@@ -154,7 +137,7 @@ def chat_page():
             full_response = ""
 
             # Invoke the model
-            response = invoke_model(bedrock_client, st.session_state.chat_history)
+            response = invoke_model(st.session_state.chat_history)
 
             # Display the response
             full_response = response
