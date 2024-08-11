@@ -61,7 +61,7 @@ def switch_page(page):
 
 def invoke_model(messages):
     # Set the model ID, e.g., Claude 3 Haiku.
-    model_id = "anthropic.claude-3-haiku-20240307-v1:0"
+    model_id = "claude-3-haiku-20240307"
 
     client = anthropic.Anthropic(
     # defaults to os.environ.get("ANTHROPIC_API_KEY")
