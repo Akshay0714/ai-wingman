@@ -105,7 +105,7 @@ def invoke_model(messages):
         return "I'm sorry, I encountered an error. Please try again."
 
     # Extract and return the response text.
-    return message.content.text
+    return message.content[0].text
 
 def chat_page():
     st.title("Get to Know Your Awesome Date!")
