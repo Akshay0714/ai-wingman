@@ -59,7 +59,7 @@ def login_page():
         if check_password():
             st.session_state.authenticated = True
             st.session_state.page = 'main'
-            st.experimental_rerun()
+            st.rerun()
     else:
         st.error("Incorrect username")
 
@@ -97,7 +97,7 @@ if 'answer' not in st.session_state:
 # Function to switch pages
 def switch_page(page):
     st.session_state.page = page
-    st.experimental_rerun()# Chat page
+    st.rerun()# Chat page
 
 
 def invoke_model(messages):
