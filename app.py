@@ -23,6 +23,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# Authentication functions
 def check_password():
     """Returns `True` if the user had the correct password."""
 
@@ -50,6 +51,17 @@ def check_password():
     else:
         # Password correct.
         return True
+
+def login_page():
+    st.title("Login")
+    username = st.text_input("Username")
+    if username == st.secrets["auth"]["username"]:
+        if check_password():
+            st.session_state.authenticated = True
+            st.session_state.page = 'main'
+            st.experimental_rerun()
+    else:
+        st.error("Incorrect username")
 
 def main_page():
     st.title("Hey there, Beautiful! 😍")
@@ -208,22 +220,19 @@ def switch_page(page):
     st.session_state.page = page
 
 # Main app logic
-if 'page' not in st.session_state:
-    st.session_state.page = 'login'
+if 'authenticated' not in st.session_state:
+    st.session_state.authenticated = False
 
-if st.session_state.page == 'login':
-    st.title("Login")
-    username = st.text_input("Username")
-    if username == st.secrets["auth"]["username"]:
-        if check_password():
-            st.session_state.page = 'main'
-            st.experimental_rerun()
-    else:
-        st.error("Incorrect username")
-elif st.session_state.page == 'main':
-    main_page()
-elif st.session_state.page == 'chat':
-    chat_page()
+if not st.session_state.authenticated:
+    login_page()
+else:
+    if 'page' not in st.session_state:
+        st.session_state.page = 'main'
+
+    if st.session_state.page == 'main':
+        main_page()
+    elif st.session_state.page == 'chat':
+        chat_page()
 
 # Add background music
 st.markdown("""
