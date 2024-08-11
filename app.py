@@ -3,43 +3,6 @@ import random
 import json
 import os
 import anthropic
-
-# Set page config
-st.set_page_config(page_title="Will You Go Out With Me?", page_icon="❤️", layout="centered")
-
-# Custom CSS for background and styling
-st.markdown("""
-<style>
-    body {
-        background-image: url('https://example.com/your-background-image.jpg');
-        background-size: cover;
-    }
-    .stButton>button {
-        color: #ffffff;
-        background-color: #ff69b4;
-        border-radius: 20px;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-Certainly, I can help you add authentication to your Streamlit app and store the username and password in the secrets file, similar to how you've done with the API key. Here's how you can modify your code to include authentication:
-
-First, add the username and password to your secrets.toml file:
-
-tomlCopy[anthropic]
-api_key = "your_api_key_here"
-
-[auth]
-username = "your_username"
-password = "your_password"
-
-Now, let's modify your code to include authentication. We'll add a login page and use Streamlit's built-in authentication mechanism:
-
-pythonCopyimport streamlit as st
-import random
-import json
-import os
-import anthropic
 import hmac
 
 # Set page config
