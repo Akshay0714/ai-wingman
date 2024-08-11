@@ -262,15 +262,6 @@ elif st.session_state.page == 'main':
 elif st.session_state.page == 'chat':
     chat_page()
 
-# Main app logic
-if 'page' not in st.session_state:
-    st.session_state.page = 'main'
-
-if st.session_state.page == 'main':
-    main_page()
-elif st.session_state.page == 'chat':
-    chat_page()
-
 # Add background music
 st.markdown("""
 <audio autoplay loop>
