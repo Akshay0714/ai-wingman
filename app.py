@@ -4,6 +4,7 @@ import json
 import os
 import anthropic
 import hmac
+import base64
 
 # Set page config
 st.set_page_config(page_title="Be My Valentine?", page_icon="💖", layout="centered")
@@ -53,13 +54,13 @@ def login_page():
         if check_password():
             st.session_state.authenticated = True
             st.session_state.page = 'main'
-            st.experimental_rerun()
+            st.rerun()
     else:
         st.error("Incorrect username")
 
 def switch_page(page):
     st.session_state.page = page
-    st.experimental_rerun()
+    st.rerun()
 
 def main_page():
     st.title("Happy Early Valentine's Day! 💖")
@@ -186,8 +187,21 @@ else:
         chat_page()
 
 # Add background music (Valentine's Day special tune)
-st.markdown("""
+def get_audio_base64(file_path):
+    with open(file_path, "rb") as f:
+        audio_bytes = f.read()
+    return base64.b64encode(audio_bytes).decode()
+
+# Convert the local file to a Base64 string
+audio_base64 = get_audio_base64("First-Sight.mp3")
+
+# Create an HTML string with autoplay and loop attributes
+audio_html = f"""
 <audio autoplay loop>
-    <source src="https://example.com/your-valentine-song.mp3" type="audio/mpeg">
+    <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
+    Your browser does not support the audio element.
 </audio>
-""", unsafe_allow_html=True)
+"""
+
+# Render the HTML
+st.markdown(audio_html, unsafe_allow_html=True)
