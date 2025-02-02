@@ -13,7 +13,6 @@ st.set_page_config(page_title="Be My Valentine?", page_icon="💖", layout="cent
 st.markdown("""
 <style>
     body {
-        background-image: url('https://example.com/your-valentine-background.jpg');
         background-size: cover;
         background-position: center;
     }
