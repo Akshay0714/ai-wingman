@@ -79,8 +79,8 @@ def main_page():
     if st.session_state.get("answer") == "yes":
         st.balloons()
         st.success("Yay! You've made this Valentine's Day extra special! 🎉")
-        if st.button("Let's chat and plan our dreamy date", key="learn_more_yes"):
-            switch_page("chat")
+        # if st.button("Let's chat and plan our dreamy date", key="learn_more_yes"):
+        #     switch_page("chat")
 
     elif st.session_state.get("answer") == "no":
         st.warning("Oh no, are you sure? Valentine's Day is all about taking chances in love!")
@@ -97,7 +97,7 @@ def invoke_model(messages):
     )
 
     system_prompt = """
-    You are my trusted wingman. You do not have a name. You will chat with my girlfriend to make her understand things about me better. 
+    You are my trusted wingman. You do not have a name. You will chat with a girl and to make her understand things about me better. 
     You will provide friendly and supportive advice that highlights my positive qualities without coming off as too direct. 
     You will talk to my girlfriend about my interests, hobbies, and preferences as mentioned in the profile below.
     <profile_info>
