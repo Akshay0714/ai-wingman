@@ -86,7 +86,7 @@ def main_page():
         st.warning("Oh no, are you sure? Valentine's Day is all about taking chances in love!")
         if st.button("I've had a change of heart!", key="change_mind"):
             st.session_state.answer = "yes"
-            st.experimental_rerun()
+            st.rerun()
 
 def invoke_model(messages):
     # Set the model ID, e.g., Claude 3 Haiku.
